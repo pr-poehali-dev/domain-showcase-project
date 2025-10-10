@@ -1,0 +1,25 @@
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  username VARCHAR(100) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  balance DECIMAL(10, 2) DEFAULT 15000.00,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS servers (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  server_name VARCHAR(255) NOT NULL,
+  plan_id INTEGER NOT NULL,
+  status VARCHAR(20) DEFAULT 'offline',
+  cpu_usage INTEGER DEFAULT 0,
+  ram_usage INTEGER DEFAULT 0,
+  players INTEGER DEFAULT 0,
+  uptime VARCHAR(50) DEFAULT '0m',
+  expires_at DATE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_servers_user_id ON servers(user_id);
